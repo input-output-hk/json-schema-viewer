@@ -4,6 +4,7 @@ import { JsonSchema } from './schema';
 import Spinner from '@atlaskit/spinner';
 import EmptyState from '@atlaskit/empty-state';
 import { addRecentlyViewedLink } from './recently-viewed';
+import YAML from 'yaml';
 
 export type LoadSchemaProps = RouteComponentProps & {
    children: (schema: JsonSchema) => ReactNode;
@@ -52,7 +53,14 @@ class LoadSchemaWR extends React.PureComponent<LoadSchemaProps, LoadSchemaState>
 
    private loadUrl(url: string): void {
       fetch(url)
-         .then(resp => resp.json())
+         .then(resp => resp.text())
+         .then(raw => {
+            try {
+              return JSON.parse(raw);
+            } catch (e) {
+              return YAML.parse(raw);
+            }
+         })
          .then(schema => this.setState({ result: { schema, currentUrl: url } }))
          .catch(e => this.setState({ result: { currentUrl: url, schema: { message: e.message }}}));
    }

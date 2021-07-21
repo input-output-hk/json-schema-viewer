@@ -1,0 +1,1 @@
+(self.webpackChunkjson_schema_viewer=self.webpackChunkjson_schema_viewer||[]).push([[6495],{4970:e=>{"use strict";function s(e){e.languages.ini={comment:/^[ \t]*[;#].*$/m,selector:/^[ \t]*\[.*?\]/m,constant:/^[ \t]*[^\s=]+?(?=[ \t]*=)/m,"attr-value":{pattern:/=.*/,inside:{punctuation:/^[=]/}}}}e.exports=s,s.displayName="ini",s.aliases=[]}}]);

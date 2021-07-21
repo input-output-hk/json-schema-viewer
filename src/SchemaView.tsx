@@ -101,13 +101,6 @@ export class SchemaViewWR extends React.PureComponent<SchemaViewProps> {
           lookup={lookup}
           stage="both"
         />
-        <SchemaViewWR.EditorContainer>
-          <SchemaEditor
-            initialContent={fullExample}
-            schema={schema}
-          />
-          <SchemaViewWR.EditorContainerHeading>Editor and Validator</SchemaViewWR.EditorContainerHeading>
-        </SchemaViewWR.EditorContainer>
       </SchemaViewWR.Container>
     );
   }

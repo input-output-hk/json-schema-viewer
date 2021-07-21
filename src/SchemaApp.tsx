@@ -142,17 +142,8 @@ class SchemaAppWR extends React.PureComponent<RouteComponentProps, SchemaAppStat
 
     return (
       <div>
-        <AtlassianNavigation
-          label="Json schema viewer header"
-          primaryItems={primaryItems}
-          renderCreate={NewSchema}
-          renderProductHome={JsonSchemaHome}
-        />
         <Switch>
-          <Route exact={true} path="/"><Redirect to="/start" /></Route>
-          <Route exact={true} path="/start">
-            <Start />
-          </Route>
+          <Route exact={true} path="/"><Redirect to="/view" /></Route>
           <Route path="/view">
             <LoadSchema>
               {(schema) => (
@@ -164,7 +155,6 @@ class SchemaAppWR extends React.PureComponent<RouteComponentProps, SchemaAppStat
               )}
             </LoadSchema>
           </Route>
-          <Route path="/docs/:id"><Docs /></Route>
         </Switch>
       </div>
     );

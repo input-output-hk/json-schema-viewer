@@ -492,11 +492,6 @@ export class SchemaExplorer extends React.PureComponent<SchemaExplorerProps, Sch
       content: (
         <SchemaExplorerExample schema={schema} lookup={lookup} stage={stage} format="json" />
       )
-    }, {
-      label: 'Example (YAML)',
-      content: (
-        <SchemaExplorerExample schema={schema} lookup={lookup} stage={stage} format="yaml" />
-      )
     }];
 
     const onTabSelect: OnSelectCallback = tab => {

@@ -1,7 +1,7 @@
 import { AtlassianNavigation, Create, ProductHome } from '@atlaskit/atlassian-navigation';
 import { AtlassianIcon, AtlassianLogo } from '@atlaskit/logo';
 import React from 'react';
-import { Redirect, Route, RouteComponentProps, Switch, useHistory, withRouter } from 'react-router-dom';
+import { Redirect, Route, RouteComponentProps, HashRouter, useHistory, withRouter } from 'react-router-dom';
 import { LoadSchema } from './LoadSchema';
 import { JsonSchema } from './schema';
 import { SchemaView } from './SchemaView';
@@ -142,7 +142,7 @@ class SchemaAppWR extends React.PureComponent<RouteComponentProps, SchemaAppStat
 
     return (
       <div>
-        <Switch>
+        <HashRouter>
           <Route exact={true} path="/"><Redirect to="/view" /></Route>
           <Route path="/view">
             <LoadSchema>
@@ -156,7 +156,7 @@ class SchemaAppWR extends React.PureComponent<RouteComponentProps, SchemaAppStat
               )}
             </LoadSchema>
           </Route>
-        </Switch>
+        </HashRouter>
       </div>
     );
   }

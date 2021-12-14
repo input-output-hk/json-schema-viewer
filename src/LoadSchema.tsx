@@ -16,6 +16,7 @@ export type LoadSchemaError = {
 
 export type LoadSchemaState = {
    result?: ResultState;
+   noSchema?: boolean;
 };
 
 export type ResultState = {
@@ -43,6 +44,8 @@ class LoadSchemaWR extends React.PureComponent<LoadSchemaProps, LoadSchemaState>
       const url = this.getUrlFromProps();
       if (url !== null) {
          this.loadUrl(url);
+      } else {
+        this.setState({ noSchema: true })
       }
    }
 
@@ -66,12 +69,24 @@ class LoadSchemaWR extends React.PureComponent<LoadSchemaProps, LoadSchemaState>
    }
 
    render() {
-      const { result } = this.state;
+      const { result, noSchema } = this.state;
+      if (noSchema) {
+        return (
+            <EmptyState
+               header="No schema to load?"
+               description="Unable to find any schema to load at the given URL."
+               primaryAction={(
+                  <p>Did you set <code>?url=http://...</code>?</p>
+               )}
+            />
+        )
+      }
+
       if (result === undefined) {
          return (
             <EmptyState
                header="Loading schema..."
-               description="Attempting to pull the JSON Schema down from the public internet."
+               description="Attempting to pull the JSON Schema from the public internet."
                primaryAction={(
                   <Spinner size="xlarge" />
                )}
@@ -83,7 +98,7 @@ class LoadSchemaWR extends React.PureComponent<LoadSchemaProps, LoadSchemaState>
          return (
             <EmptyState
                header="Schema load failed"
-               description="Attempted to pull the JSON Schema down from the public internet."
+               description="Attempted to pull the JSON Schema from the public internet."
                primaryAction={(
                   <p>Error: ${result.schema.message}</p>
                )}

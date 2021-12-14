@@ -82,7 +82,7 @@ export class SchemaViewWR extends React.PureComponent<SchemaViewProps> {
     const currentSchema = getSchemaFromReference(currentPathElement.reference, lookup);
 
     if (currentSchema === undefined) {
-      return <div>ERROR: Could not look up the schema that was requested in the URL.</div>;
+      return <div>Loading schema...</div>;
     }
 
     if (typeof currentSchema === 'boolean') {

@@ -152,7 +152,7 @@ const getTypeText = (initialSchema: JsonSchema | undefined, initialReference: st
      return <Plain>{initialSchema === true ? 'anything' : 'nothing'}</Plain>
   }
 
-  if (isExternalReference(initialSchema)) {
+  if (isExternalReference(initialSchema, id)) {
     return <Click id={id} fallbackTitle="anything" reference={initialReference} schema={initialSchema} />;
   }
 

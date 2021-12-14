@@ -23,6 +23,7 @@ export type ParameterViewProps = {
   required?: boolean;
   deprecated?: boolean;
   schema: JsonSchema | undefined;
+  id: string | undefined;
   reference: string;
   lookup: Lookup;
   clickElement: ClickElement;
@@ -52,6 +53,7 @@ export const ParameterView: React.FC<ParameterViewProps> = (props) => (
       reference={props.reference}
       lookup={props.lookup}
       clickElement={props.clickElement}
+      id={props.id}
     />
     {props.description !== undefined && (
       <Description>

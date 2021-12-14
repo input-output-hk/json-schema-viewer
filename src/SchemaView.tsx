@@ -13,6 +13,7 @@ import { generateJsonExampleFor, isErrors } from './example';
 import { forSize } from './breakpoints';
 
 export type SchemaViewProps = RouteComponentProps & {
+  id: string | undefined;
   basePathSegments: Array<string>;
   schema: JsonSchema;
   stage: Stage;
@@ -68,7 +69,7 @@ export class SchemaViewWR extends React.PureComponent<SchemaViewProps> {
   `;
 
   public render() {
-    const { schema, basePathSegments } = this.props;
+    const { schema, basePathSegments, id } = this.props;
 
     const lookup = new InternalLookup(schema);
     const path = this.getPathFromRoute(lookup);
@@ -95,6 +96,7 @@ export class SchemaViewWR extends React.PureComponent<SchemaViewProps> {
       <SchemaViewWR.Container>
         <SideNavWithRouter basePathSegments={basePathSegments} links={extractLinks(schema, lookup)} />
         <SchemaExplorer
+          id={id}
           basePathSegments={basePathSegments}
           path={path}
           schema={currentSchema}

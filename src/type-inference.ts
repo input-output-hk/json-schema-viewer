@@ -113,6 +113,10 @@ export function isPrimitiveType(type: JsonSchema1['type']): boolean {
   return primitiveTypes.includes(type);
 }
 
-export function isExternalReference(schema: JsonSchema1): boolean {
-  return schema.$ref !== undefined && schema.$ref.startsWith('http');
+export function isExternalReference(schema: JsonSchema1, id: string | undefined): boolean {
+  if (schema.$ref === undefined) {
+    return false;
+  }
+  const url = id !== undefined ? `${id}${schema.$ref}` : schema.$ref;
+  return url.startsWith('http');
 }

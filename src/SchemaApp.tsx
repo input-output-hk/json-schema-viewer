@@ -148,6 +148,7 @@ class SchemaAppWR extends React.PureComponent<RouteComponentProps, SchemaAppStat
             <LoadSchema>
               {(schema) => (
                 <SchemaView
+                  id={schema.$id}
                   basePathSegments={['view']}
                   schema={schema}
                   stage="both"

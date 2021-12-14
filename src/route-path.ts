@@ -16,9 +16,9 @@ export function linkToRoot(basePathSegments: Array<string>, url: string): string
   return linkToComponentInUrl(basePathSegments, '#', url);
 }
 
-export function externalLinkTo(basePathSegments: Array<string>, externalRef: string): string | null {
+export function externalLinkTo(basePathSegments: Array<string>, externalRef: string, id: string | undefined): string | null {
   try {
-    const parsedUrl = new URL(externalRef);
+    const parsedUrl = new URL(id !== undefined ? `${id}${externalRef}` : externalRef);
 
     if (parsedUrl.protocol === 'http:') {
       // In production, since we host on https, without this you would get mixed content errors when attempting to

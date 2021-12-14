@@ -206,6 +206,7 @@ const SchemaExplorerExample: React.FC<SchemaExplorerExampleProps> = props => {
 };
 
 export type SchemaExplorerDetailsProps = {
+  id: string | undefined;
   schema: JsonSchema1;
   reference: string;
   lookup: Lookup;
@@ -218,11 +219,11 @@ const DescriptionContainer = styled.div`
     margin-bottom: 10px;
 `;
 
-function getDescriptionForSchema(schema: JsonSchema): string | undefined {
+function getDescriptionForSchema(schema: JsonSchema, id: string | undefined): string | undefined {
   if (typeof schema === 'boolean') {
     return schema ? 'Anything is allowed here.' : 'There is no valid value for this property.';
   }
-  if (isExternalReference(schema)) {
+  if (isExternalReference(schema, id)) {
     return 'This is an external reference. Click on the reference to try and view this external JSON Schema. Use the browser back button to return here.'
   }
   if (Object.keys(schema).length === 0) {
@@ -232,7 +233,7 @@ function getDescriptionForSchema(schema: JsonSchema): string | undefined {
 }
 
 export const SchemaExplorerDetails: React.FC<SchemaExplorerDetailsProps> = props => {
-  const { schema, reference, clickElement, lookup, stage } = props;
+  const { id, schema, reference, clickElement, lookup, stage } = props;
   const properties = schema.properties || {};
 
   const renderedProps = Object.keys(properties)
@@ -261,7 +262,7 @@ export const SchemaExplorerDetails: React.FC<SchemaExplorerDetailsProps> = props
           <ParameterView
             key={p.propertyName}
             name={p.propertyName}
-            description={getDescriptionForSchema(p.lookupResult.schema)}
+            description={getDescriptionForSchema(p.lookupResult.schema, id)}
             required={isRequired}
             deprecated={false}
             schema={p.lookupResult.schema}
@@ -275,7 +276,7 @@ export const SchemaExplorerDetails: React.FC<SchemaExplorerDetailsProps> = props
           <ParameterView
             key={p.propertyName}
             name={p.propertyName}
-            description={getDescriptionForSchema(p.initialSchema)}
+            description={getDescriptionForSchema(p.initialSchema, id)}
             required={isRequired}
             schema={p.initialSchema}
             reference={p.propertyReference}
@@ -310,7 +311,7 @@ export const SchemaExplorerDetails: React.FC<SchemaExplorerDetailsProps> = props
         <ParameterView
           key="dac__schema-additional-properties"
           name="Additional Properties"
-          description={getDescriptionForSchema(additionalPropertiesResult)}
+          description={getDescriptionForSchema(additionalPropertiesResult, id)}
           required={false}
           schema={additionalPropertiesResult.schema}
           reference={resolvedReference}
@@ -328,7 +329,7 @@ export const SchemaExplorerDetails: React.FC<SchemaExplorerDetailsProps> = props
       <ParameterView
         key={`pattern-properties-${i}`}
         name={`/${pattern}/ (keys of pattern)`}
-        description={getDescriptionForSchema(schema)}
+        description={getDescriptionForSchema(schema, id)}
         required={false}
         schema={getSchemaFromResult(lookupResult) || patternProperties[pattern]}
         reference={lookupResult?.baseReference || `${reference}/patternProperties/${pattern}`}
@@ -352,6 +353,7 @@ export const SchemaExplorerDetails: React.FC<SchemaExplorerDetailsProps> = props
           : <p key="mixins-description">This object must match the following conditions:</p>
         }
         <Type
+          id={id}
           key="mixins-type"
           s={compositeOnlyType}
           clickElement={clickElement}
@@ -392,8 +394,8 @@ type JsonSchemaObjectClickProps = {
 
 function createClickElement(details: JsonSchemaObjectClickProps): ClickElement {
   return (props) => {
-    if (isExternalReference(props.schema) && props.schema.$ref !== undefined) {
-      const externalUrl = externalLinkTo(details.basePathSegments, props.schema.$ref);
+    if (isExternalReference(props.schema, props.id) && props.schema.$ref !== undefined) {
+      const externalUrl = externalLinkTo(details.basePathSegments, props.schema.$ref, props.id);
       if (externalUrl === null) {
         return <Anything />;
       } else {
@@ -411,6 +413,7 @@ function createClickElement(details: JsonSchemaObjectClickProps): ClickElement {
 }
 
 export type SchemaExplorerProps = {
+  id: string | undefined;
   basePathSegments: Array<string>;
   path: PathElement[];
   schema: JsonSchema1;
@@ -468,7 +471,7 @@ export class SchemaExplorer extends React.PureComponent<SchemaExplorerProps, Sch
   }
 
   render() {
-    const { path, schema, lookup, stage, basePathSegments } = this.props;
+    const { id, path, schema, lookup, stage, basePathSegments } = this.props;
     const { pathExpanded } = this.state;
     if (path.length === 0) {
       return <div>TODO What do we do when the reference could not be found? Error maybe?</div>;
@@ -480,6 +483,7 @@ export class SchemaExplorer extends React.PureComponent<SchemaExplorerProps, Sch
       label: 'Details',
       content: (
         <SchemaExplorerDetails
+          id={id}
           schema={schema}
           reference={currentPathElement.reference}
           lookup={lookup}

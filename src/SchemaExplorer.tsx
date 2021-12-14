@@ -14,7 +14,7 @@ import { CodeBlockWithCopy } from './code-block-with-copy';
 import { generateJsonExampleFor, isExample } from './example';
 import { Stage, shouldShowInStage } from './stage';
 import { externalLinkTo, linkTo, PathElement } from './route-path';
-import { ClickElement, Type, Anything } from './Type';
+import { ClickElement, Type, Anything, getTypeText } from './Type';
 import { Link, LinkProps, useHistory, useLocation } from 'react-router-dom';
 import { getTitle, findTitle } from './title';
 import { LinkPreservingSearch, NavLinkPreservingSearch } from './search-preserving-link';
@@ -381,9 +381,31 @@ export const SchemaExplorerDetails: React.FC<SchemaExplorerDetailsProps> = props
     )
   }
 
+  const contentEncoding = schema.contentEncoding ? (<p>Encoding: {schema.contentEncoding}</p>) : null;
+
+  const typeDescription = ["boolean", "number", "integer", "string", "null"].includes(schema.type)
+    ? ( <div>
+          <h3>Type</h3>
+          <DescriptionContainer>
+            <Type
+              id={id}
+              s={schema}
+              reference={reference}
+              lookup={lookup}
+              clickElement={clickElement}
+            />
+            {contentEncoding}
+          </DescriptionContainer>
+        </div>
+      )
+    : (<div></div>);
+
   return (
     <div>
+      {typeDescription}
+
       <DescriptionContainer>
+        <h3>Description</h3>
         {schema.description && <Markdown source={schema.description} />}
       </DescriptionContainer>
       {mixinProps}
